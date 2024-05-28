@@ -5,6 +5,7 @@
 package View;
 
 
+import Model.Admin;
 import Model.AdminDao;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -285,6 +286,27 @@ public class SingUp extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+        if(isEmpty()){
+            String username = jTextField3.getText().trim();
+            if(! dao.isAdminNameExist(username)){
+                Admin admin = new Admin();
+                admin.setId(dao.getMaxRowAdminTable());
+                admin.setUsername(username);
+                admin.setPassword(String.valueOf(jPasswordField1.getPassword())); 
+                admin.setsQues(jComboBox1.getSelectedItem().toString());
+                admin.setAns(jTextField5.getText().trim());
+                
+                if(dao.insert(admin)){
+                    JOptionPane.showMessageDialog(this, "Admin Successfully Created..");
+                    new LoginFrame().setVisible(true);
+                    setVisible(false);
+                }else{
+                    JOptionPane.showMessageDialog(this, "Failed","Warning",2);
+                }
+            }else{
+                JOptionPane.showMessageDialog(this, "Username already exists","Warning",2);
+            }
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
