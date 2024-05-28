@@ -8,7 +8,6 @@ import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,6 +36,38 @@ public class AdminDao {
         }
         
         return row + 1;
+    }
+    public boolean isAdminNameExist(String username){
+        try {
+            ps = con.prepareStatement("select * from admin where username = ?");
+            ps.setString(1, username);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                return true;
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(AdminDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return false;
+    }
+    
+    public boolean insert(Admin admin){
+        String sql = "insert into admin (id, username, password , s_ques , ans) values (?,?,?,?,?)";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, admin.getId());
+            ps.setString(2, admin.getUsername());
+            ps.setString(3, admin.getPassword());
+            ps.setString(4, admin.getsQues());
+            ps.setString(5, admin.getAns());
+            
+            
+            return ps.executeUpdate() > 0 ;
+            
+        } catch (Exception ex) {
+            return false;
+        }
     }
     
 }
